@@ -24,8 +24,8 @@ This was the main design decision.
 
 | Step | Who does it | Why |
 |---|---|---|
-| Reading a 40-page CIM and pulling out financials, ask, owner plans | **Claude** (structured extraction) | This is slow for people and a strength for language models. Output is a fixed schema, not free text. |
-| Drafting thesis, risks and diligence questions | **Claude** | A useful first draft that the analyst edits. |
+| Reading a 40-page CIM and pulling out financials, ask, owner plans | **AI model** (structured extraction) | This is slow for people and a strength for language models. Output is a fixed schema, not free text. |
+| Drafting thesis, risks and diligence questions | **AI model** | A useful first draft that the analyst edits. |
 | Correcting extracted numbers | **The analyst** | Extraction is a draft. Every field is editable, and the tool recalculates from what the analyst approves. |
 | SDE normalization, debt schedule, DSCR, IRR, pricing | **Plain code** (`model.js`) | Models are unreliable at arithmetic, and investment math has to be checkable. It's covered by tests. |
 | Pass / pursue / price | **Code, from the fund's own criteria** | The decision rules are explicit and editable. The model is told not to value or recommend. |
@@ -44,7 +44,7 @@ The model reads and drafts. Code does the math and applies the rules. People own
 
 A tool only helps if the team can keep using it after the person who built it leaves.
 
-- **No build step, no server, no framework.** Four files: `index.html` (layout), `app.js` (screens and the Claude call), `model.js` (all deal math), `samples.js` (demo data). Hosting is GitHub Pages.
+- **No build step, no server, no framework.** Four files: `index.html` (layout), `app.js` (screens and the extraction call), `model.js` (all deal math), `samples.js` (demo data). Hosting is GitHub Pages.
 - **Rules are settings, not code.** Thresholds and deal terms live on the Fund criteria page, so changing the fund's box doesn't require a developer.
 - **The math is isolated and tested.** `npm test` checks sources and uses, a hand-calculated DSCR, SDE normalization and the price solver.
 - **No secrets in the repo.** Each user enters their own API key in Settings. It's sent only to api.anthropic.com.
@@ -62,4 +62,4 @@ npm test
 
 ---
 
-Built by Devansh Trivedi, with Claude as a coding partner. Sample companies, brokers and figures are fictional.
+Built by Devansh Trivedi. Sample companies, brokers and figures are fictional.

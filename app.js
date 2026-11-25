@@ -161,7 +161,7 @@ function newView() {
         <textarea id="nText" rows="14" placeholder="Paste the broker teaser, CIM excerpt, owner call notes or financials…"></textarea>
         <div style="display:flex; align-items:center; gap:12px; margin-top:10px">
           <button class="btn" id="nGo">Extract and screen</button>
-          <span class="hint">${hasKey ? "Financials and memo sections are extracted with Claude; all math runs locally." : `Add an Anthropic API key in <a href="#/settings">Settings</a> to extract from documents.`}</span>
+          <span class="hint">${hasKey ? "Financials and memo sections are extracted by an AI model; all math runs locally." : `Add an Anthropic API key in <a href="#/settings">Settings</a> to extract from documents.`}</span>
         </div>
       </div></div>
     </div>`;
@@ -181,7 +181,7 @@ function newView() {
     const key = getKey(); if (!key) { toast("Add your API key in Settings first"); location.hash = "#/settings"; return; }
     $("#nGo").disabled = true; $("#nGo").textContent = "Extracting…"; $("#view").classList.add("busy");
     try {
-      const x = await callClaude({ key, model: settings.model, text, file: attached });
+      const x = await extractDeal({ key, model: settings.model, text, file: attached });
       const id = crypto.randomUUID().slice(0, 8);
       deals.unshift({
         id, sample: false, createdAt: new Date().toISOString(), x, source: { text, file: attached?.name || "" },
@@ -537,7 +537,7 @@ function settingsView() {
   $("#sReset").onclick = () => { deals = [...deals.filter(d => !d.sample), ...seed()]; save(); toast("Sample deals reloaded"); };
 }
 
-// ================= Claude extraction =================
+// ================= AI extraction =================
 const SYSTEM = `You are an analyst at a search fund reviewing a small private business for acquisition (typically $1-5M EBITDA, owner-operated).
 Extract facts and draft the qualitative memo sections from the broker materials, CIM or owner call notes. Rules:
 - Use only what the materials state. Never invent numbers, names or claims. Use null when a number isn't given.
@@ -567,7 +567,7 @@ const TOOL = {
     diligence_questions: { type: "array", items: { type: "string" } }, claims_to_verify: { type: "array", items: { type: "string" } }, summary: { type: "string" },
   }, required: ["company_name", "sector", "subsector", "hq", "years_in_business", "employees", "sites", "description", "business_model", "financials", "payor_mix", "recurring_revenue_pct", "top_customer_pct", "asking_price", "asking_multiple", "asking_multiple_basis", "owner_transition", "owner_dependence", "owner_dependence_note", "management", "thesis", "risks", "diligence_questions", "claims_to_verify", "summary"] },
 };
-async function callClaude({ key, model, text, file }) {
+async function extractDeal({ key, model, text, file }) {
   const content = [];
   if (file) content.push(file.kind === "pdf" ? { type: "document", source: { type: "base64", media_type: "application/pdf", data: file.data } } : { type: "text", text: `Attached file (${file.name}):\n\n${file.data}` });
   content.push({ type: "text", text: `Screen this acquisition target.\n\n<materials>\n${text || "(see attached file)"}\n</materials>` });
