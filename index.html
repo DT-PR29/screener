@@ -78,7 +78,7 @@
   .deal-h h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
   .deal-h .meta { color: var(--muted); margin-top: 2px; }
   .deal-h .ctl { margin-left: auto; display: flex; gap: 8px; align-items: flex-end; }
-  .stats { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; }
+  .stats { display: grid; grid-template-columns: repeat(8, 1fr); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; }
   .stats > div { padding: 9px 12px; border-right: 1px solid var(--line2); }
   .stats > div:last-child { border-right: 0; }
   .stats .k { font-size: 11px; color: var(--muted); }
@@ -138,11 +138,11 @@
     .checks li { grid-template-columns: 18px 1fr; } .checks li span:last-child { grid-column: 2; }
   }
   @media print {
-    @page { margin: .6in; }
+    @page { margin: .5in; }
     body { background: #fff; }
     aside, .top, .deal-h, .stats, .tabs, #toast, .no-print { display: none !important; }
     .shell { display: block; } .page { padding: 0; max-width: none; }
-    .doc { border: 0; padding: 0; max-width: none; font-size: 10.5pt; }
+    .doc { border: 0; padding: 0; max-width: none; font-size: 9.5pt; } .doc h3 { margin: 12px 0 6px !important; } .doc table td, .doc table th { padding: 3px 6px !important; } .doc p { margin: 3px 0; }
     .rec { flex-direction: row !important; } .ret { grid-template-columns: 1fr 1.15fr !important; }
     .checks li { grid-template-columns: 18px 190px 1fr !important; } .checks li span:last-child { grid-column: auto !important; }
     table, .rec, .ret { break-inside: avoid; } .doc h3 { break-after: avoid; }

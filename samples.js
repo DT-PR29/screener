@@ -1,152 +1,152 @@
-// Fictional teasers for demo mode. Companies, people and figures are invented.
-// Each has the teaser text plus a saved model extraction so the app works without
-// an API key. All deal math (screen, LBO, bid range, sensitivity) runs live.
+// Fictional deals for the sample pipeline. Companies, people, brokers and figures are invented.
+// Each has the broker materials plus a saved extraction; all deal math runs live.
 
-// Process details for the sample pipeline (also fictional).
 export const SAMPLE_META = {
-  crestline: { source: "Harbor Lane Advisors", process: "Broad auction", received: "2026-11-12", ioiDue: "2026-12-04", stage: "Screening", owner: "DT" },
-  atlas: { source: "Founder outreach", process: "Proprietary", received: "2026-11-03", ioiDue: "2026-11-21", stage: "IOI submitted", owner: "DT" },
-  brightpath: { source: "Pinewood Securities", process: "Targeted", received: "2026-10-28", ioiDue: "", stage: "Passed", owner: "DT" },
+  bayside: { source: "Westfield Business Brokers", process: "Broker (limited)", received: "2026-11-10", ioiDue: "2026-12-03", stage: "Screening", owner: "DT" },
+  ridgeline: { source: "Owner outreach (cold email)", process: "Proprietary", received: "2026-10-30", ioiDue: "2026-12-12", stage: "Owner call", owner: "DT" },
+  pinecrest: { source: "Sunbelt Advisors", process: "Broker (broad)", received: "2026-10-21", ioiDue: "", stage: "Passed", owner: "DT" },
 };
 
 export const SAMPLES = [
   {
-    id: "crestline",
-    title: "Crestline Diagnostics",
-    text: `PROJECT SUMMIT: CONFIDENTIAL TEASER
+    id: "bayside",
+    text: `CONFIDENTIAL BUSINESS PROFILE: Physician Billing & Revenue Cycle Company (Southern California)
 
-Crestline Diagnostics Partners ("Crestline") is a leading independent provider of outpatient diagnostic imaging and clinical lab services in the Southeast, operating 14 sites across Georgia, Tennessee and the Carolinas.
+Bayside Medical Billing Solutions provides outsourced billing, coding and collections for 120+ independent physician practices (orthopedics, dermatology, GI). Founded 2004.
 
-Financial summary ($M)       2023    2024    2025    2026E
-Net revenue                  62.0    71.0    82.0    93.0
-Adj. EBITDA                  11.2    13.1    15.6    18.4
+($M)               2023    2024    2025
+Revenue            6.8     7.4     8.1
+Adj. EBITDA        1.50    1.70    1.95
 
-Highlights
-- 4 de novo sites opened since 2022, each reaching breakeven within 14 months
-- Referral network of 1,100+ physicians; ~65% of volume from repeat referring practices
-- Diversified payor mix: commercial 52%, Medicare 22%, Medicaid 9%, other 17%; largest payor (regional BCBS plan) is 18% of revenue
-- Founder-led; CEO Dr. Marcus Hale (radiologist) and CFO Janine Ortiz (ex-HCA) to roll 20% equity
-- Fragmented market with 40+ identified tuck-in targets ($1-4M EBITDA)
+- ~85% of revenue billed monthly as a % of client collections under evergreen agreements
+- Largest client is 7% of revenue; average client tenure 8 years
+- 64 employees, including 22 certified coders; Operations Manager (12 years) runs day-to-day
+- Owner (age 68) is retiring and will support a 6-month transition
+- Adj. EBITDA reflects a market-rate GM salary
 
-The shareholders are seeking a partner to accelerate de novo and M&A growth. Guidance: 13.5x LTM Adj. EBITDA.`,
+Asking price: $10.0M`,
     extraction: {
-      company_name: "Crestline Diagnostics Partners", sector: "Healthcare services: outpatient imaging and lab", subsector: "Diagnostics", sites: 14,
-      payor_mix: { commercial: 52, medicare: 22, medicaid: 9, other: 17 },
-      description: "Independent outpatient diagnostic imaging and clinical lab provider with 14 sites across GA, TN and the Carolinas.",
-      business_model: "Fee-for-service reimbursement from commercial payors and Medicare on imaging and lab volume driven by physician referrals.",
-      hq: "Southeast US",
+      company_name: "Bayside Medical Billing Solutions", sector: "Healthcare services: physician revenue cycle management", subsector: "Revenue cycle management", sites: null,
+      description: "Outsourced billing, coding and collections for 120+ independent physician practices in Southern California.",
+      business_model: "Monthly fee charged as a percentage of client collections, under evergreen service agreements.",
+      hq: "Southern California", years_in_business: 22, employees: 64,
       financials: [
-        { year: "2023", revenue: 62, ebitda: 11.2, is_projection: false },
-        { year: "2024", revenue: 71, ebitda: 13.1, is_projection: false },
-        { year: "2025", revenue: 82, ebitda: 15.6, is_projection: false },
-        { year: "2026E", revenue: 93, ebitda: 18.4, is_projection: true },
+        { year: "2023", revenue: 6.8, ebitda: 1.5, sde: null, is_projection: false },
+        { year: "2024", revenue: 7.4, ebitda: 1.7, sde: null, is_projection: false },
+        { year: "2025", revenue: 8.1, ebitda: 1.95, sde: null, is_projection: false },
       ],
-      recurring_revenue_pct: 65, top_customer_pct: 18, asking_multiple: 13.5, asking_price: null,
-      management: "Founder-led: CEO Dr. Marcus Hale (radiologist), CFO Janine Ortiz (ex-HCA); management rolling 20% equity.",
+      payor_mix: null, recurring_revenue_pct: 85, top_customer_pct: 7,
+      asking_price: 10.0, asking_multiple: null, asking_multiple_basis: null, other_adjustments: null,
+      owner_transition: "retiring", owner_dependence: "low", owner_dependence_note: "Operations Manager (12 years) runs day-to-day; owner retiring with a 6-month transition",
+      management: "Founder (68) retiring with a 6-month transition; Operations Manager with 12 years of tenure; 22 certified coders.",
       thesis: [
-        "Proven de novo playbook: 4 new sites reached breakeven within 14 months, giving organic growth a sponsor can underwrite.",
-        "Buy-and-build runway: 40+ identified tuck-ins at $1–4M EBITDA, which can likely be bought at lower multiples than the platform.",
-        "Sticky demand: 1,100+ referring physicians and ~65% repeat referral volume, with no payor above 18%.",
+        "Recurring, sticky revenue: ~85% billed monthly on evergreen contracts, with average client tenure of 8 years.",
+        "No concentration: largest client 7% across 120+ practices.",
+        "Clear levers for a new CEO: price to market, add specialties, and use automation and AI-assisted coding to expand margins.",
       ],
       risks: [
-        { risk: "Reimbursement cuts (Medicare is 22% of revenue; imaging rates are a frequent CMS target).", mitigant: "Model a 5–10% rate cut on Medicare volume; check commercial contract renewal dates." },
-        { risk: "Radiologist and technologist staffing shortages could cap capacity at new sites.", mitigant: "Diligence turnover, open roles and the teleradiology backup coverage." },
-        { risk: "Asking price of 13.5x assumes the growth continues.", mitigant: "Anchor the bid to returns on LTM EBITDA, not 2026E." },
+        { risk: "Independent practices being bought by hospitals or PE platforms could churn clients.", mitigant: "Pull churn by cause for 2021–2025; check what share of clients have been acquired." },
+        { risk: "Certified coder turnover and wage pressure.", mitigant: "Review coder tenure, pay vs. market, and offshore coding options." },
+        { risk: "Billing errors create compliance exposure.", mitigant: "Audit claim denial rates and any payer audit history; confirm E&O coverage." },
       ],
       diligence_questions: [
-        "Site-level P&Ls: how do the 4 de novos compare to mature sites on EBITDA margin?",
-        "What are the EBITDA add-backs, and how much of Adj. EBITDA is pro forma?",
-        "Payor contract terms and renewal schedule for the top 5 payors?",
-        "Equipment age and the capex needed to replace MRI/CT units over the hold?",
+        "Gross revenue retention and churn reasons for each of the last 5 years?",
+        "How is the GM salary normalized in Adj. EBITDA, and what other add-backs are there?",
+        "Revenue by specialty and by client cohort?",
+        "Which client relationships does the owner personally manage?",
       ],
-      claims_to_verify: ["De novo breakeven within 14 months", "65% repeat referral volume", "40+ tuck-in targets"],
-      summary: "A growing, founder-led diagnostics platform with a real buy-and-build angle in a fragmented market. The business fits; the 13.5x ask is the issue.",
+      claims_to_verify: ["Average client tenure of 8 years", "85% recurring revenue"],
+      summary: "A recurring, diversified healthcare services business with a retiring owner and a manager already in place: close to a textbook search fund target. The price is reasonable for the quality.",
     },
   },
   {
-    id: "atlas",
-    title: "Keystone Physical Therapy",
-    text: `PROJECT KEYSTONE: CONFIDENTIAL
+    id: "ridgeline",
+    text: `Ridgeline Commercial HVAC: Owner discussion notes + financials (Denver, CO)
 
-Keystone Physical Therapy Partners operates 31 outpatient physical therapy clinics across Texas and Oklahoma, treating orthopedic, sports and post-surgical patients.
+Commercial HVAC service, maintenance and replacement for office buildings, schools and light industrial facilities. Founded 1995.
 
-($M)            2023   2024   2025
-Revenue         38.0   44.0   51.0
-Adj. EBITDA      6.1    7.5    9.2
+($M)                     2023    2024    2025
+Revenue                  14.0    15.2    16.5
+Seller's disc. earnings  2.90    3.15    3.40   (includes owner salary of $0.4M)
 
-- Same-clinic visit growth of 7% in 2025; 6 clinics opened since 2023
-- Payor mix: commercial 56%, Medicare 26%, Medicaid 4%, workers' comp / auto / other 14%; largest payor (UnitedHealthcare) 14%
-- Referral relationships with 400+ orthopedic surgeons; 2 hospital system JV clinics
-- Founder (PT, age 61) seeking majority recap; regional directors average 9 years tenure
+- ~40% of revenue from annual preventive maintenance agreements
+- Largest customer (a school district) is 11% of revenue
+- 85 employees, 60 field technicians; a service manager oversees scheduling
+- Owner (59) is the primary salesperson for all large replacement projects; open to a full exit with a 12-month transition
 
-Owner expectation: ~$60M enterprise value.`,
+Owner's price expectation: 7.0x SDE`,
     extraction: {
-      company_name: "Keystone Physical Therapy Partners", sector: "Healthcare services: outpatient physical therapy", subsector: "Physical therapy", sites: 31,
-      payor_mix: { commercial: 56, medicare: 26, medicaid: 4, other: 14 },
-      description: "Outpatient physical therapy platform with 31 clinics across Texas and Oklahoma, focused on orthopedic, sports and post-surgical care.",
-      business_model: "Fee-for-service visits reimbursed by commercial payors, Medicare, workers' comp and auto, driven by surgeon referrals.",
-      hq: "Texas",
+      company_name: "Ridgeline Commercial HVAC", sector: "Commercial services: HVAC service and maintenance", subsector: "HVAC services", sites: null,
+      description: "Commercial HVAC service, maintenance and replacement for offices, schools and light industrial facilities in the Denver area.",
+      business_model: "Annual preventive maintenance agreements (~40% of revenue) plus repair and replacement project work.",
+      hq: "Denver, CO", years_in_business: 31, employees: 85,
       financials: [
-        { year: "2023", revenue: 38, ebitda: 6.1, is_projection: false },
-        { year: "2024", revenue: 44, ebitda: 7.5, is_projection: false },
-        { year: "2025", revenue: 51, ebitda: 9.2, is_projection: false },
+        { year: "2023", revenue: 14.0, ebitda: null, sde: 2.9, is_projection: false },
+        { year: "2024", revenue: 15.2, ebitda: null, sde: 3.15, is_projection: false },
+        { year: "2025", revenue: 16.5, ebitda: null, sde: 3.4, is_projection: false },
       ],
-      recurring_revenue_pct: null, top_customer_pct: 14, asking_multiple: null, asking_price: 60,
-      management: "Founder (PT, 61) seeking a majority recap and rolling equity; regional directors average 9 years of tenure.",
+      payor_mix: null, recurring_revenue_pct: 40, top_customer_pct: 11,
+      asking_price: null, asking_multiple: 7.0, asking_multiple_basis: "sde", other_adjustments: null,
+      owner_transition: "exiting", owner_dependence: "high", owner_dependence_note: "Owner is the primary salesperson for all large replacement projects",
+      management: "Owner (59) leads sales on large projects and is open to a full exit with a 12-month transition; a service manager runs scheduling.",
       thesis: [
-        "Organic growth engine: 7% same-clinic visit growth plus 6 de novo clinics since 2023.",
-        "Favorable payor mix for PT: 56% commercial and 14% workers' comp/auto, with Medicare at 26% and no payor above 14%.",
-        "Platform for add-ons in a fragmented market; the 2 hospital JV clinics are a template for more partnerships.",
+        "Essential, non-discretionary service with 30-year durability and 40% of revenue under annual maintenance agreements.",
+        "Steady growth: revenue up ~9% a year with no customer above 11%.",
+        "Professionalize sales: hire a project sales lead and grow the maintenance base, which also lowers owner dependence.",
       ],
       risks: [
-        { risk: "Medicare PT fee schedule cuts (26% of revenue).", mitigant: "Model a 3% annual Medicare rate cut; check that the commercial contracts have escalators." },
-        { risk: "Therapist shortage and wage inflation compress clinic margins.", mitigant: "Diligence clinician turnover, open roles and visits per therapist by clinic." },
-        { risk: "Founder transition on surgeon referral relationships.", mitigant: "Map the top 50 referring surgeons to clinic directors, not the founder." },
+        { risk: "The owner personally sells the large replacement projects.", mitigant: "12-month transition with an earnout tied to project bookings; hire a sales lead in year 1." },
+        { risk: "Technician shortage limits growth.", mitigant: "Review tech turnover and the apprenticeship pipeline; benchmark wages." },
+        { risk: "The price is quoted on SDE, which includes the owner's $0.4M salary.", mitigant: "Price on adjusted EBITDA after a market CEO salary; re-quote the multiple to the owner on that basis." },
       ],
       diligence_questions: [
-        "Clinic-level P&Ls: margin of the 6 de novos vs. the mature base?",
-        "Visits per therapist per day and therapist turnover, by clinic?",
-        "Commercial contract renewal dates and rate escalators for the top 5 payors?",
-        "What drives the EBITDA add-backs, and are any related to the founder's comp?",
+        "Revenue split between maintenance agreements, repair and replacement projects, with gross margin for each?",
+        "Share of replacement revenue the owner sourced personally over the last 3 years?",
+        "Maintenance agreement renewal rate and pricing escalators?",
+        "Fleet and equipment age, and the capex needed over the next 5 years?",
       ],
-      claims_to_verify: ["7% same-clinic visit growth", "400+ referring surgeons"],
-      summary: "A growing, well-run PT platform with a commercial-heavy payor mix at a fair ask. Medicare rate risk and founder referral relationships are the key diligence items.",
+      claims_to_verify: ["40% of revenue from maintenance agreements", "Owner salary of $0.4M included in SDE"],
+      summary: "A durable, growing service business, but the 7.0x SDE ask is about 7.6x real earnings once a CEO is paid, and the owner holds the sales relationships. Worth pursuing at a lower price with a structured transition.",
     },
   },
   {
-    id: "brightpath",
-    title: "BrightPath Staffing",
-    text: `BrightPath Clinical Staffing: Investment Opportunity
+    id: "pinecrest",
+    text: `Pinecrest Home Care (Phoenix, AZ): Broker teaser
 
-BrightPath places travel and per-diem nurses with hospital systems in the Midwest.
+Non-medical home care (personal care, companionship) for seniors. Founded 2017.
 
-($M)         2023    2024    2025
-Revenue     140.0   128.0   110.0
-EBITDA       14.0    10.0     7.0
+($M)          2023    2024    2025
+Revenue       12.6    12.1    11.8
+EBITDA         1.40    1.15    1.05
 
-- Largest client (a 9-hospital system) represents 31% of revenue
-- Bill rates normalizing post-COVID; management expects stabilization in 2026
-- Seeking 7.0x LTM EBITDA`,
+- Payor mix: Medicaid managed care (ALTCS) 62%, private pay 38%
+- Largest payor (one Medicaid MCO) is 41% of revenue
+- 310 caregivers; caregiver turnover ~70% annually
+- Owner wishes to remain as CEO post-transaction
+
+Asking: 6.0x EBITDA`,
     extraction: {
-      company_name: "BrightPath Clinical Staffing", sector: "Healthcare staffing", subsector: "Staffing", sites: null, payor_mix: null,
-      description: "Travel and per-diem nurse staffing for Midwest hospital systems.",
-      business_model: "Bill-rate spread on nurses placed with hospital clients.",
-      hq: "Midwest US",
+      company_name: "Pinecrest Home Care", sector: "Healthcare services: non-medical home care", subsector: "Home care", sites: null,
+      description: "Non-medical home care (personal care and companionship) for seniors in the Phoenix area.",
+      business_model: "Hourly care billed to Medicaid managed care plans and private-pay families.",
+      hq: "Phoenix, AZ", years_in_business: 9, employees: 310,
       financials: [
-        { year: "2023", revenue: 140, ebitda: 14, is_projection: false },
-        { year: "2024", revenue: 128, ebitda: 10, is_projection: false },
-        { year: "2025", revenue: 110, ebitda: 7, is_projection: false },
+        { year: "2023", revenue: 12.6, ebitda: 1.4, sde: null, is_projection: false },
+        { year: "2024", revenue: 12.1, ebitda: 1.15, sde: null, is_projection: false },
+        { year: "2025", revenue: 11.8, ebitda: 1.05, sde: null, is_projection: false },
       ],
-      recurring_revenue_pct: 20, top_customer_pct: 31, asking_multiple: 7, asking_price: null,
-      management: "Not described.",
-      thesis: ["Possible recovery if bill rates stabilize, as management expects in 2026."],
+      payor_mix: { commercial: 0, medicare: 0, medicaid: 62, other: 38 }, recurring_revenue_pct: null, top_customer_pct: 41,
+      asking_price: null, asking_multiple: 6.0, asking_multiple_basis: "ebitda", other_adjustments: null,
+      owner_transition: "staying", owner_dependence: null, owner_dependence_note: "",
+      management: "Owner wants to remain CEO after the transaction.",
+      thesis: ["Aging demographics support long-term demand for home care."],
       risks: [
-        { risk: "Revenue and EBITDA are falling as post-COVID bill rates normalize.", mitigant: "None evident from the materials." },
-        { risk: "One hospital system is 31% of revenue.", mitigant: "None stated." },
+        { risk: "One Medicaid MCO is 41% of revenue, and rates are set by the state.", mitigant: "None evident." },
+        { risk: "~70% caregiver turnover with shrinking revenue and margins.", mitigant: "None evident from the materials." },
       ],
-      diligence_questions: ["Contract term and renewal date with the 31% client?", "Monthly bill-rate and margin trend through 2025?"],
-      claims_to_verify: ["Stabilization in 2026"],
-      summary: "Shrinking revenue, collapsing margins and heavy concentration in a single client. A pass at any multiple until the trend turns.",
+      diligence_questions: ["MCO contract term and the history of rate changes?", "Monthly hours billed and caregiver headcount trend?"],
+      claims_to_verify: [],
+      summary: "Shrinking, thin-margin, concentrated in one Medicaid payor, and the owner wants to stay as CEO. It doesn't fit a search fund.",
     },
   },
 ];
