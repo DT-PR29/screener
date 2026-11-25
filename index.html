@@ -3,240 +3,169 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Screener: from CIM to IC memo</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%231f4d3a%22/%3E%3Cpath d=%22M8 22l5-6 4 3 7-9%22 stroke=%22white%22 stroke-width=%223%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E">
-<meta name="description" content="Upload a teaser or CIM and get a first-pass IC memo: screening, a quick LBO, IRR sensitivity and an indicative bid range.">
+<title>Screener</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%2316231d%22/%3E%3Cpath d=%22M8 22l5-6 4 3 7-9%22 stroke=%22%2389c2a3%22 stroke-width=%223%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E">
 <style>
   :root {
-    --bg: #f6f5f1; --card: #fff; --ink: #1c1b19; --muted: #6b6860; --line: #e4e1d8;
-    --accent: #1f4d3a; --accent-soft: #e6efe9;
-    --pass: #1f7a4d; --fail: #b4372f; --flag: #b7791f; --unknown: #7a7770;
-    --radius: 10px;
+    --bg: #f4f5f4; --panel: #fff; --ink: #18201c; --muted: #66706b; --faint: #9aa29e; --line: #e2e6e3; --line2: #eef1ef;
+    --side: #16231d; --side-ink: #c9d6cf; --side-active: #24372e;
+    --accent: #1f5a43; --accent-soft: #e5f0ea;
+    --go: #1d7048; --go-bg: #e2f1e8; --mid: #8a5a12; --mid-bg: #fbf0dc; --no: #a63a32; --no-bg: #f8e4e1; --info: #3b5b86; --info-bg: #e6edf6;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; }
-  header { padding: 28px 24px 8px; max-width: 1180px; margin: 0 auto; }
-  header h1 { margin: 0; font-size: 26px; letter-spacing: -0.01em; }
-  header p { margin: 6px 0 0; color: var(--muted); max-width: 760px; }
-  main { max-width: 1180px; margin: 0 auto; padding: 16px 24px 48px; display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
-  .left { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; }
-  label.lbl { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); display: block; margin-bottom: 6px; }
-  textarea, input[type=text], input[type=password] { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; color: inherit; }
-  textarea { resize: vertical; }
-  #materials { min-height: 200px; font-size: 14px; }
-  textarea:focus, input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
-  .file-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
-  .file-row label.btn-sm { cursor: pointer; }
-  .btn { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 11px 16px; font: inherit; font-weight: 600; cursor: pointer; width: 100%; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--bg); color: var(--ink); font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; }
+  .num, td.n, th.n { font-variant-numeric: tabular-nums; text-align: right; }
+  .shell { display: grid; grid-template-columns: 208px 1fr; min-height: 100vh; }
+
+  /* sidebar */
+  aside { background: var(--side); color: var(--side-ink); padding: 16px 10px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; }
+  .brand { display: flex; align-items: center; gap: 8px; padding: 4px 8px 2px; color: #fff; font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+  .brand svg { flex: none; }
+  .firm { padding: 0 8px 14px 34px; font-size: 11.5px; color: #8fa198; }
+  aside a { color: var(--side-ink); text-decoration: none; padding: 7px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+  aside a:hover { background: #1d2d25; }
+  aside a.on { background: var(--side-active); color: #fff; }
+  aside a .ct { font-size: 11px; color: #8fa198; }
+  .side-foot { margin-top: auto; font-size: 11px; color: #7d8f86; padding: 8px; line-height: 1.4; }
+
+  /* main */
+  main { min-width: 0; }
+  .top { display: flex; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 5; }
+  .top h1 { font-size: 16px; margin: 0; font-weight: 650; }
+  .top .crumb { color: var(--muted); }
+  .top .sp { flex: 1; }
+  .page { padding: 18px 24px 40px; max-width: 1240px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .panel-h { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .panel-b { padding: 14px; }
+  .muted { color: var(--muted); } .faint { color: var(--faint); }
+  .btn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 6px; padding: 6px 12px; font: inherit; font-weight: 600; cursor: pointer; }
   .btn:disabled { opacity: .6; cursor: progress; }
-  .btn-sm { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 5px 10px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
-  .link { background: none; border: 0; color: var(--accent); font: inherit; font-size: 13px; cursor: pointer; padding: 0 4px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 11px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
-  .chip:hover { border-color: var(--accent); background: var(--accent-soft); }
-  details summary { cursor: pointer; font-weight: 600; font-size: 14px; }
-  details .body { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
-  .key-state { font-size: 12px; color: var(--muted); }
-  .key-state.ok { color: var(--pass); }
-  .small { font-size: 12px; color: var(--muted); margin: 0; }
-  .muted { color: var(--muted); }
+  .btn2 { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 6px; padding: 6px 11px; font: inherit; cursor: pointer; }
+  .btn2:hover { border-color: #c9cfcb; }
+  .link { background: none; border: 0; color: var(--accent); font: inherit; cursor: pointer; padding: 0; }
+  input, select, textarea { font: inherit; color: inherit; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; background: #fff; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+  textarea { width: 100%; resize: vertical; }
+  label.f { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  label.f input, label.f select { color: var(--ink); }
 
-  #result { min-height: 420px; transition: opacity .2s; }
-  #result.loading { opacity: .45; }
-  .placeholder { color: var(--muted); text-align: center; padding: 90px 20px; }
-  .placeholder b { color: var(--ink); }
-  .res-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
-  .res-head h2 { margin: 0; font-size: 22px; }
-  .one { margin: 4px 0; }
-  .meta { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
-  .tag { display: inline-block; background: #f0eee8; border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--muted); }
-  .verdict { min-width: 168px; text-align: right; border-radius: 8px; padding: 10px 14px; }
-  .v-label { font-weight: 700; }
-  .v-score { font-size: 26px; font-weight: 700; line-height: 1.1; margin-top: 4px; }
-  .v-score small { font-size: 12px; font-weight: 500; opacity: .75; margin-left: 3px; }
-  .d-go { background: #e3f2ea; color: var(--pass); }
-  .d-mid { background: #fbf1df; color: #8a5a12; }
-  .d-no { background: #f7e5e3; color: var(--fail); }
-  .demo-note { background: #f0eee8; border-radius: 6px; padding: 8px 10px; font-size: 13px; color: var(--muted); margin: 14px 0 0; }
-  .reason { margin: 14px 0 4px; font-weight: 500; }
-  .route { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
-  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 22px 0 8px; }
-  .hint { text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 12px; margin-left: 6px; }
-  .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
-  .checks li { display: grid; grid-template-columns: 22px 170px 1fr; gap: 8px; align-items: baseline; font-size: 14px; }
-  .ic { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; color: #fff; font-size: 11px; font-weight: 700; }
-  .c-pass .ic { background: var(--pass); } .c-fail .ic { background: var(--fail); } .c-flag .ic { background: var(--flag); } .c-unknown .ic { background: var(--unknown); }
-  .c-fail span:last-child { color: var(--fail); }
-  .tmp { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
-  .tmp p { margin: 4px 0 0; font-size: 14px; }
-  .tmp-head { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-  .dots { display: inline-flex; gap: 3px; }
-  .dots i { width: 14px; height: 6px; border-radius: 3px; background: #e7e4dc; }
-  .dots i.on { background: var(--accent); }
-  .conf { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: auto; }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .plain { margin: 0; padding-left: 18px; font-size: 14px; }
-  .plain li { margin-bottom: 4px; }
-  #reply { font-size: 14px; }
+  /* kpis */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+  .kpi .k { font-size: 11.5px; color: var(--muted); }
+  .kpi .v { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .kpi .s { font-size: 11.5px; color: var(--faint); }
 
-  .pipe { grid-column: 1 / -1; }
-  .pipe-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .pipe-head h2 { margin: 0; font-size: 18px; }
-  .pipe-head .spacer { flex: 1; }
-  #pipeStats { font-size: 13px; color: var(--muted); }
-  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
-  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); padding: 8px 6px; }
-  td { white-space: nowrap; border-bottom: 1px solid var(--line); padding: 9px 6px; }
-  tbody tr[data-id] { cursor: pointer; }
-  tbody tr[data-id]:hover { background: #faf9f6; }
-  .pill { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 600; }
-  .empty { color: var(--muted); text-align: center; padding: 24px; }
-  .how { grid-column: 1 / -1; font-size: 14px; }
-  .how ol { margin: 8px 0 0; padding-left: 20px; }
-  .how li { margin-bottom: 4px; }
-  #teamList { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
-  footer { max-width: 1180px; margin: 0 auto; padding: 0 24px 40px; font-size: 12px; color: var(--muted); }
-  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 14px; opacity: 0; pointer-events: none; transition: all .2s; max-width: 90vw; }
-  #toast.show { opacity: 1; transform: translateX(-50%); }
-  @media (max-width: 900px) { main { grid-template-columns: 1fr; } .left { position: static; } .two { grid-template-columns: 1fr; } .checks li { grid-template-columns: 22px 1fr; } .checks li span:last-child { grid-column: 2; } .res-head { flex-direction: column; } .verdict { text-align: left; } }
+  /* tables */
+  table { border-collapse: collapse; width: 100%; }
+  th { text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; padding: 8px 10px; border-bottom: 1px solid var(--line); background: #fafbfa; white-space: nowrap; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--line2); vertical-align: middle; }
+  tr.row { cursor: pointer; } tr.row:hover td { background: #f8faf9; }
+  td .co { font-weight: 600; } td .sub { font-size: 11.5px; color: var(--muted); }
+  .tag { display: inline-block; font-size: 10.5px; padding: 0 5px; border-radius: 3px; background: #eef1ef; color: var(--muted); vertical-align: 1px; margin-left: 4px; font-weight: 500; }
+  .pill { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .go { background: var(--go-bg); color: var(--go); } .mid { background: var(--mid-bg); color: var(--mid); } .no { background: var(--no-bg); color: var(--no); } .inf { background: var(--info-bg); color: var(--info); }
+  .stage { font-size: 12px; padding: 3px 6px; }
+  .due-soon { color: var(--no); font-weight: 600; }
+  .filters { display: flex; gap: 6px; margin: 0 0 10px; flex-wrap: wrap; }
+  .fbtn { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 3px 10px; cursor: pointer; font: inherit; font-size: 12px; color: var(--muted); }
+  .fbtn.on { background: var(--ink); border-color: var(--ink); color: #fff; }
 
-  .sub { font-size: 12px; color: var(--muted); }
-  tr.sel td { background: #f3f6f4; }
-  .af { display: grid; grid-template-columns: 1fr 84px; align-items: center; gap: 8px; font-size: 13px; }
-  .af input { border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font: inherit; text-align: right; }
-  .af input.ovr { border-color: var(--accent); background: var(--accent-soft); }
-  #assump { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
-  .doc { font-size: 14.5px; }
-  .doc p { margin: 6px 0; }
-  .eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-  .doc h2 { font-family: Georgia, "Times New Roman", serif; font-size: 28px; margin: 4px 0 2px; font-weight: 600; }
-  .doc-meta { color: var(--muted); font-size: 13px; }
-  .doc-top { border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 14px; }
-  .doc h3 { border-bottom: 1px solid var(--line); padding-bottom: 4px; }
-  .rec { display: flex; justify-content: space-between; gap: 16px; border-radius: 8px; padding: 14px 16px; }
-  .rec-label { font-weight: 700; font-size: 16px; }
-  .rec-reason { margin-top: 4px; color: var(--ink); opacity: .85; }
-  .rec-r { text-align: right; min-width: 170px; }
-  .rec-r .k { font-size: 12px; opacity: .8; }
-  .rec-r .v { font-size: 22px; font-weight: 700; line-height: 1.2; }
-  .rec-r .v.sm { font-size: 14px; }
-  table.fin, table.risk, table.kv, table.sens { margin-top: 6px; }
-  table.fin td, table.fin th { text-align: right; padding: 6px 8px; }
-  table.fin td:first-child, table.fin th:first-child { text-align: left; }
-  table.fin tr.sub td { color: var(--muted); font-size: 12.5px; border-bottom: 1px solid var(--line); }
-  table.fin .proj { color: var(--muted); font-style: italic; background: #faf9f6; }
-  table.fin th { text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--ink); }
-  table.risk td { vertical-align: top; width: 50%; white-space: normal; }
-  .ret { display: grid; grid-template-columns: 1fr 1.1fr; gap: 20px; align-items: start; }
-  table.kv td { padding: 6px 4px; white-space: normal; }
-  table.kv td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-  table.kv tr.tot td { border-top: 2px solid var(--ink); border-bottom: 0; font-weight: 700; }
-  .sens-title { font-size: 12px; color: var(--muted); margin-top: 6px; }
-  table.sens td, table.sens th { text-align: center; padding: 6px 4px; font-size: 13px; font-variant-numeric: tabular-nums; }
-  table.sens th { color: var(--muted); font-weight: 600; text-transform: none; letter-spacing: 0; }
-  .h4 { background: #cfe8da; } .h3 { background: #e5f2ea; } .h2 { background: #fbf1df; } .h1 { background: #f7e5e3; }
+  /* deal page */
+  .deal-h { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 12px; }
+  .deal-h h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .deal-h .meta { color: var(--muted); margin-top: 2px; }
+  .deal-h .ctl { margin-left: auto; display: flex; gap: 8px; align-items: flex-end; }
+  .stats { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; }
+  .stats > div { padding: 9px 12px; border-right: 1px solid var(--line2); }
+  .stats > div:last-child { border-right: 0; }
+  .stats .k { font-size: 11px; color: var(--muted); }
+  .stats .v { font-size: 15px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 1px; }
+  .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .tabs a { padding: 8px 12px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tabs a.on { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  td input.cell { width: 90px; text-align: right; padding: 4px 6px; font-variant-numeric: tabular-nums; }
+  td input.cell.yr { width: 80px; text-align: left; }
+  input.ovr { border-color: var(--accent); background: var(--accent-soft); }
+  .hint { font-size: 11.5px; color: var(--faint); }
+  .checks { list-style: none; margin: 0; padding: 0; }
+  .checks li { display: grid; grid-template-columns: 18px 190px 1fr; gap: 8px; padding: 4px 0; align-items: baseline; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .c-pass .dot { background: var(--go); } .c-fail .dot { background: var(--no); } .c-flag .dot { background: #c98a1a; } .c-unknown .dot { background: #b7bdb9; }
+  .c-fail span:last-child { color: var(--no); }
+  .sens td, .sens th { text-align: center; padding: 6px; font-variant-numeric: tabular-nums; }
+  .sens th { background: none; text-transform: none; letter-spacing: 0; font-size: 11.5px; }
+  .h4 { background: #cfe8da; } .h3 { background: #e4f1e9; } .h2 { background: #fbf0dc; } .h1 { background: #f8e4e1; }
   td.base { outline: 2px solid var(--ink); outline-offset: -2px; font-weight: 700; }
-  td { white-space: nowrap; }
-  .memo-actions { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 8px; }
-  @media (max-width: 900px) { .ret { grid-template-columns: 1fr; } .rec { flex-direction: column; } .rec-r { text-align: left; } }
+  .note { border-left: 2px solid var(--line); padding: 2px 0 2px 10px; margin-bottom: 10px; }
+  .note .when { font-size: 11.5px; color: var(--faint); }
+  .empty { text-align: center; color: var(--muted); padding: 28px; }
+
+  /* memo document */
+  .doc { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 32px 40px; max-width: 860px; font-size: 13.5px; }
+  .doc .eyebrow { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .doc h2 { font-family: Georgia, "Times New Roman", serif; font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
+  .doc .dmeta { color: var(--muted); font-size: 12px; }
+  .doc .dtop { border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
+  .doc h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin: 18px 0 8px; }
+  .doc p { margin: 5px 0; }
+  .doc ol, .doc ul { margin: 4px 0; padding-left: 20px; }
+  .doc table td, .doc table th { padding: 5px 8px; }
+  .rec { display: flex; justify-content: space-between; gap: 16px; border-radius: 6px; padding: 12px 14px; }
+  .rec .l { font-weight: 700; font-size: 14.5px; }
+  .rec .r { text-align: right; min-width: 160px; }
+  .rec .r .v { font-size: 19px; font-weight: 700; }
+  .rec .r .k { font-size: 11.5px; opacity: .85; }
+  .fin .proj { color: var(--muted); font-style: italic; background: #fafbfa; }
+  .fin tr.sub td { color: var(--muted); font-size: 12px; }
+  .ret { display: grid; grid-template-columns: 1fr 1.15fr; gap: 18px; align-items: start; }
+  .kv td:last-child { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kv tr.tot td { border-top: 2px solid var(--ink); font-weight: 700; }
+
+  #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 6px; opacity: 0; pointer-events: none; transition: all .18s; z-index: 50; }
+  #toast.show { opacity: 1; transform: translateX(-50%); }
+  .busy { opacity: .5; pointer-events: none; }
+
+  @media (max-width: 960px) {
+    .shell { grid-template-columns: 1fr; } aside { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; } .firm, .side-foot { display: none; }
+    .kpis, .grid4 { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: repeat(3, 1fr); } .grid2, .grid3, .ret { grid-template-columns: 1fr; }
+    .deal-h { flex-direction: column; } .deal-h .ctl { margin-left: 0; flex-wrap: wrap; } .page { padding: 14px; } .doc { padding: 20px; }
+    .checks li { grid-template-columns: 18px 1fr; } .checks li span:last-child { grid-column: 2; }
+  }
   @media print {
-    @page { margin: 0.6in; }
-    body { background: #fff; font-size: 11pt; }
-    header, .left, .pipe, .how, footer, #toast, .no-print, .memo-actions { display: none !important; }
-    main { display: block; padding: 0; max-width: none; }
-    #memo { border: 0; padding: 0; }
-    .doc { font-size: 10.5pt; }
-    .doc h3 { break-after: avoid; }
-    table, .rec, .ret { break-inside: avoid; }
+    @page { margin: .6in; }
+    body { background: #fff; }
+    aside, .top, .deal-h, .stats, .tabs, #toast, .no-print { display: none !important; }
+    .shell { display: block; } .page { padding: 0; max-width: none; }
+    .doc { border: 0; padding: 0; max-width: none; font-size: 10.5pt; }
+    .rec { flex-direction: row !important; } .ret { grid-template-columns: 1fr 1.15fr !important; }
+    .checks li { grid-template-columns: 18px 190px 1fr !important; } .checks li span:last-child { grid-column: auto !important; }
+    table, .rec, .ret { break-inside: avoid; } .doc h3 { break-after: avoid; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .rec { flex-direction: row !important; } .rec-r { text-align: right !important; }
-    .ret { grid-template-columns: 1fr 1.1fr !important; }
-    .checks li { grid-template-columns: 22px 170px 1fr !important; } .checks li span:last-child { grid-column: auto !important; }
-    .doc p, .doc li, .doc td { line-height: 1.35; } .doc h3 { margin: 14px 0 6px; }
   }
 </style>
 </head>
 <body>
-<header>
-  <h1>Screener</h1>
-  <p>Teaser or CIM in, first-pass investment committee memo out. Claude reads the materials and drafts the qualitative sections. Every number (the screen, a 5-year LBO, IRR sensitivity, and an indicative bid range solved from your target IRR) is calculated in plain code, so you can check it and change the assumptions live.</p>
-</header>
-
-<main>
-  <section class="left">
-    <div class="card">
-      <label class="lbl" for="materials">Deal materials</label>
-      <textarea id="materials" placeholder="Paste a teaser, CIM excerpt or banker email…"></textarea>
-      <div class="file-row" style="margin-top:10px">
-        <label class="btn-sm" for="file">Attach CIM</label>
-        <input id="file" type="file" accept=".pdf,.txt,.md" hidden>
-        <span id="fileName">Teaser or CIM (PDF)</span>
-        <button class="link" id="clearFile" hidden>remove</button>
-      </div>
-      <button class="btn" id="go" style="margin-top:14px">Screen deal</button>
-      <p class="small" style="margin-top:8px">⌘/Ctrl + Enter to run</p>
-    </div>
-
-    <div class="card">
-      <label class="lbl">Try a demo deal (no key needed)</label>
-      <div class="chips" id="samples"></div>
-      <p class="small" style="margin-top:10px">Fictional companies: a good business priced too high, a clean pursue, and a screen fail.</p>
-    </div>
-
-    <div class="card">
-      <label class="lbl">Deal assumptions</label>
-      <p class="small">Edit any field and the memo recalculates. Highlighted fields are overrides.</p>
-      <div id="assump"><p class="small">Open a deal to edit.</p></div>
-    </div>
-
-    <details class="card" id="settings">
-      <summary>Settings: API key &amp; model</summary>
-      <div class="body">
-        <div>
-          <label class="lbl" for="apiKey">Anthropic API key</label>
-          <input id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
-          <div class="key-state" id="keyState"></div>
-        </div>
-        <label><input type="checkbox" id="remember"> Remember on this device</label>
-        <div>
-          <label class="lbl" for="model">Model</label>
-          <input id="model" type="text" list="models">
-          <datalist id="models"><option value="claude-sonnet-5-5"><option value="claude-opus-5-5"><option value="claude-haiku-5-5"></datalist>
-        </div>
-        <div><label class="lbl" for="author">Memo author</label><input id="author" type="text"></div>
-        <button class="btn-sm" id="forget">Forget key</button>
-        <p class="small">The key only ever goes from this browser to api.anthropic.com. It's never in the code or the repo, and by default it's cleared when the tab closes. Don't upload materials you're under NDA for.</p>
-      </div>
-    </details>
-  </section>
-
-  <section>
-    <div class="memo-actions"><button class="btn-sm" id="copyMemo">Copy as text</button><button class="btn-sm" id="print">Print / save PDF</button></div>
-    <div class="card" id="memo"><div class="placeholder"><b>No deal open.</b><br>Click a demo deal on the left, or paste a teaser.</div></div>
-  </section>
-
-  <section class="card pipe">
-    <div class="pipe-head"><h2>Deal log</h2></div>
-    <div style="overflow-x:auto"><table>
-      <thead><tr><th>Company</th><th>LTM EBITDA</th><th>Margin</th><th>MOIC / IRR</th><th>Bid range</th><th>Recommendation</th><th></th></tr></thead>
-      <tbody id="dealBody"></tbody>
-    </table></div>
-    <p class="small" style="margin-top:10px">Saved in this browser. Click a deal to reopen its memo.</p>
-  </section>
-
-  <section class="card how">
-    <h2 style="margin:0;font-size:18px">How it works</h2>
-    <ol>
-      <li><b>Extract.</b> Claude reads the teaser or CIM (PDFs supported) and returns a fixed schema: historical and projected financials, customer concentration, recurring revenue, the seller's ask, plus a thesis, risks with mitigants, and diligence questions. It's told not to compute returns or recommend.</li>
-      <li><b>Screen in code.</b> EBITDA size, margin floor, revenue growth, top-customer concentration and recurring revenue, each checked against set thresholds.</li>
-      <li><b>Model in code.</b> A 5-year LBO on LTM EBITDA (historicals only; management projections are shown but never drive returns), with a cash sweep, MOIC, IRR, and a 5×5 entry/exit sensitivity table.</li>
-      <li><b>Price it.</b> Solves for the highest entry multiple that still clears the target IRR, which gives an indicative bid range to compare against the seller's ask.</li>
-    </ol>
-  </section>
-</main>
-
-<footer>Built by Devansh Trivedi. Demo companies are fictional. This is a first-pass screening tool, not investment advice.</footer>
+<div class="shell">
+  <aside>
+    <div class="brand"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#24372e"/><path d="M8 22l5-6 4 3 7-9" stroke="#89c2a3" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Screener</div>
+    <div class="firm" id="firmName"></div>
+    <a href="#/pipeline" data-nav="pipeline">Pipeline <span class="ct" id="navCt"></span></a>
+    <a href="#/new" data-nav="new">New deal</a>
+    <a href="#/criteria" data-nav="criteria">Fund criteria</a>
+    <a href="#/settings" data-nav="settings">Settings</a>
+    <div class="side-foot">Sample deals are fictional.<br>Data is stored in this browser.</div>
+  </aside>
+  <main>
+    <div class="top"><h1 id="title"></h1><span class="sp"></span><span id="topActions"></span></div>
+    <div class="page" id="view"></div>
+  </main>
+</div>
 <div id="toast" role="status"></div>
 <script type="module" src="app.js"></script>
 </body>

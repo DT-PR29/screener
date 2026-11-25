@@ -16,7 +16,9 @@ export const DEFAULT_ASSUMPTIONS = {
 };
 
 export const DEFAULT_SCREEN = {
-  minEbitda: 3, maxEbitda: 150, minMargin: 0.15, minGrowth: 0.05, maxTopCustomer: 0.20, minRecurring: 0.5,
+  minEbitda: 3, maxEbitda: 50, minMargin: 0.12, minGrowth: 0.05, maxTopCustomer: 0.25,
+  maxGovPayor: 0.60,   // Medicare + Medicaid share of revenue; 0 turns the check off
+  minRecurring: 0,     // recurring/contracted revenue floor; 0 turns the check off
 };
 
 // ---------- historicals ----------
@@ -118,14 +120,25 @@ export function runScreen(x, h, s = DEFAULT_SCREEN) {
   else add("growth", "Revenue growth", "pass", `${pct(h.revCagr)} CAGR`);
 
   const tc = x.top_customer_pct;
-  if (!isNum(tc)) add("conc", "Customer concentration", "unknown", "Top customer share not stated");
-  else if (tc / 100 > s.maxTopCustomer) add("conc", "Customer concentration", "fail", `Top customer is ${tc}% of revenue (max ${pct(s.maxTopCustomer)})`);
-  else add("conc", "Customer concentration", "pass", `Top customer ${tc}% of revenue`);
+  if (!isNum(tc)) add("conc", "Customer / payor concentration", "unknown", "Top customer share not stated");
+  else if (tc / 100 > s.maxTopCustomer) add("conc", "Customer / payor concentration", "fail", `Top customer is ${tc}% of revenue (max ${pct(s.maxTopCustomer)})`);
+  else add("conc", "Customer / payor concentration", "pass", `Top customer ${tc}% of revenue`);
 
-  const rr = x.recurring_revenue_pct;
-  if (!isNum(rr)) add("recurring", "Recurring revenue", "unknown", "Not stated");
-  else if (rr / 100 < s.minRecurring) add("recurring", "Recurring revenue", "flag", `${rr}%, below ${pct(s.minRecurring)}`);
-  else add("recurring", "Recurring revenue", "pass", `${rr}% recurring or contracted`);
+  const pm = x.payor_mix;
+  if (s.maxGovPayor > 0 && pm && (isNum(pm.medicare) || isNum(pm.medicaid))) {
+    const gov = ((isNum(pm.medicare) ? pm.medicare : 0) + (isNum(pm.medicaid) ? pm.medicaid : 0)) / 100;
+    if (gov > s.maxGovPayor) add("gov", "Government payor", "flag", `Medicare + Medicaid ${pct(gov)} of revenue (limit ${pct(s.maxGovPayor)}): model a rate cut`);
+    else add("gov", "Government payor", "pass", `Medicare + Medicaid ${pct(gov)} of revenue`);
+  } else if (s.maxGovPayor > 0 && /health|clinic|care|medical|dental|therapy|lab|imaging|pharm|physician/i.test(x.sector || "")) {
+    add("gov", "Government payor", "unknown", "Payor mix not stated");
+  }
+
+  if (s.minRecurring > 0) {
+    const rr = x.recurring_revenue_pct;
+    if (!isNum(rr)) add("recurring", "Recurring revenue", "unknown", "Not stated");
+    else if (rr / 100 < s.minRecurring) add("recurring", "Recurring revenue", "flag", `${rr}%, below ${pct(s.minRecurring)}`);
+    else add("recurring", "Recurring revenue", "pass", `${rr}% recurring or contracted`);
+  }
   return out;
 }
 

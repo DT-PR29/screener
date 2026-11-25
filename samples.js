@@ -2,10 +2,17 @@
 // Each has the teaser text plus a saved model extraction so the app works without
 // an API key. All deal math (screen, LBO, bid range, sensitivity) runs live.
 
+// Process details for the sample pipeline (also fictional).
+export const SAMPLE_META = {
+  crestline: { source: "Harbor Lane Advisors", process: "Broad auction", received: "2026-11-12", ioiDue: "2026-12-04", stage: "Screening", owner: "DT" },
+  atlas: { source: "Founder outreach", process: "Proprietary", received: "2026-11-03", ioiDue: "2026-11-21", stage: "IOI submitted", owner: "DT" },
+  brightpath: { source: "Pinewood Securities", process: "Targeted", received: "2026-10-28", ioiDue: "", stage: "Passed", owner: "DT" },
+};
+
 export const SAMPLES = [
   {
     id: "crestline",
-    title: "Crestline Diagnostics (healthcare services)",
+    title: "Crestline Diagnostics",
     text: `PROJECT SUMMIT: CONFIDENTIAL TEASER
 
 Crestline Diagnostics Partners ("Crestline") is a leading independent provider of outpatient diagnostic imaging and clinical lab services in the Southeast, operating 14 sites across Georgia, Tennessee and the Carolinas.
@@ -17,13 +24,14 @@ Adj. EBITDA                  11.2    13.1    15.6    18.4
 Highlights
 - 4 de novo sites opened since 2022, each reaching breakeven within 14 months
 - Referral network of 1,100+ physicians; ~65% of volume from repeat referring practices
-- Diversified payor mix: largest payor (regional BCBS plan) is 18% of revenue; Medicare 22%
+- Diversified payor mix: commercial 52%, Medicare 22%, Medicaid 9%, other 17%; largest payor (regional BCBS plan) is 18% of revenue
 - Founder-led; CEO Dr. Marcus Hale (radiologist) and CFO Janine Ortiz (ex-HCA) to roll 20% equity
 - Fragmented market with 40+ identified tuck-in targets ($1-4M EBITDA)
 
 The shareholders are seeking a partner to accelerate de novo and M&A growth. Guidance: 13.5x LTM Adj. EBITDA.`,
     extraction: {
-      company_name: "Crestline Diagnostics Partners", sector: "Healthcare services: outpatient imaging and lab",
+      company_name: "Crestline Diagnostics Partners", sector: "Healthcare services: outpatient imaging and lab", subsector: "Diagnostics", sites: 14,
+      payor_mix: { commercial: 52, medicare: 22, medicaid: 9, other: 17 },
       description: "Independent outpatient diagnostic imaging and clinical lab provider with 14 sites across GA, TN and the Carolinas.",
       business_model: "Fee-for-service reimbursement from commercial payors and Medicare on imaging and lab volume driven by physician referrals.",
       hq: "Southeast US",
@@ -57,56 +65,57 @@ The shareholders are seeking a partner to accelerate de novo and M&A growth. Gui
   },
   {
     id: "atlas",
-    title: "Atlas Fleet Services (business services)",
-    text: `PROJECT ANVIL: CONFIDENTIAL
+    title: "Keystone Physical Therapy",
+    text: `PROJECT KEYSTONE: CONFIDENTIAL
 
-Atlas Fleet Services provides contracted preventive maintenance and repair for commercial vehicle fleets (utilities, municipalities, last-mile delivery) across Texas from 9 service centers and 140 mobile units.
+Keystone Physical Therapy Partners operates 31 outpatient physical therapy clinics across Texas and Oklahoma, treating orthopedic, sports and post-surgical patients.
 
 ($M)            2023   2024   2025
 Revenue         38.0   44.0   51.0
-EBITDA           6.1    7.5    9.2
+Adj. EBITDA      6.1    7.5    9.2
 
-- 72% of revenue under multi-year maintenance contracts, 94% contract renewal rate
-- 600+ fleet customers; largest customer is 9% of revenue
-- Mobile model: technicians service vehicles on-site, cutting fleet downtime
-- Owner (age 64) seeking full exit; second-tier management in place (GM 11 years, Controller 6 years)
+- Same-clinic visit growth of 7% in 2025; 6 clinics opened since 2023
+- Payor mix: commercial 56%, Medicare 26%, Medicaid 4%, workers' comp / auto / other 14%; largest payor (UnitedHealthcare) 14%
+- Referral relationships with 400+ orthopedic surgeons; 2 hospital system JV clinics
+- Founder (PT, age 61) seeking majority recap; regional directors average 9 years tenure
 
-Seller expectation: ~$60M enterprise value.`,
+Owner expectation: ~$60M enterprise value.`,
     extraction: {
-      company_name: "Atlas Fleet Services", sector: "Business services: commercial fleet maintenance",
-      description: "Contracted preventive maintenance and repair for commercial fleets across Texas, via 9 service centers and 140 mobile units.",
-      business_model: "Multi-year maintenance contracts plus time-and-materials repair, delivered on-site by mobile technicians.",
+      company_name: "Keystone Physical Therapy Partners", sector: "Healthcare services: outpatient physical therapy", subsector: "Physical therapy", sites: 31,
+      payor_mix: { commercial: 56, medicare: 26, medicaid: 4, other: 14 },
+      description: "Outpatient physical therapy platform with 31 clinics across Texas and Oklahoma, focused on orthopedic, sports and post-surgical care.",
+      business_model: "Fee-for-service visits reimbursed by commercial payors, Medicare, workers' comp and auto, driven by surgeon referrals.",
       hq: "Texas",
       financials: [
         { year: "2023", revenue: 38, ebitda: 6.1, is_projection: false },
         { year: "2024", revenue: 44, ebitda: 7.5, is_projection: false },
         { year: "2025", revenue: 51, ebitda: 9.2, is_projection: false },
       ],
-      recurring_revenue_pct: 72, top_customer_pct: 9, asking_multiple: null, asking_price: 60,
-      management: "Owner (64) seeking a full exit; GM (11 years) and Controller (6 years) in place.",
+      recurring_revenue_pct: null, top_customer_pct: 14, asking_multiple: null, asking_price: 60,
+      management: "Founder (PT, 61) seeking a majority recap and rolling equity; regional directors average 9 years of tenure.",
       thesis: [
-        "Contracted, recurring revenue: 72% under multi-year contracts with a 94% renewal rate.",
-        "Diversified base: 600+ fleet customers, none above 9% of revenue.",
-        "Clear expansion levers: replicate the mobile model in adjacent Sun Belt metros and add EV fleet servicing.",
+        "Organic growth engine: 7% same-clinic visit growth plus 6 de novo clinics since 2023.",
+        "Favorable payor mix for PT: 56% commercial and 14% workers' comp/auto, with Medicare at 26% and no payor above 14%.",
+        "Platform for add-ons in a fragmented market; the 2 hospital JV clinics are a template for more partnerships.",
       ],
       risks: [
-        { risk: "Owner exit: relationships and pricing may sit with the founder.", mitigant: "Require a 12–24 month transition, and check how many top accounts the GM owns today." },
-        { risk: "Technician labor is tight and wages are rising.", mitigant: "Diligence tech turnover, wage trends and the contract price escalators." },
-        { risk: "Texas-only footprint is exposed to the regional economy and weather.", mitigant: "Customer mix leans toward utilities and municipalities, which are less cyclical." },
+        { risk: "Medicare PT fee schedule cuts (26% of revenue).", mitigant: "Model a 3% annual Medicare rate cut; check that the commercial contracts have escalators." },
+        { risk: "Therapist shortage and wage inflation compress clinic margins.", mitigant: "Diligence clinician turnover, open roles and visits per therapist by clinic." },
+        { risk: "Founder transition on surgeon referral relationships.", mitigant: "Map the top 50 referring surgeons to clinic directors, not the founder." },
       ],
       diligence_questions: [
-        "Do contracts include annual price escalators, and have they been enforced?",
-        "Revenue and margin split between contract maintenance and T&M repair?",
-        "Fleet age and replacement capex for the 140 mobile units?",
-        "Which of the top 20 customer relationships are owned by the owner personally?",
+        "Clinic-level P&Ls: margin of the 6 de novos vs. the mature base?",
+        "Visits per therapist per day and therapist turnover, by clinic?",
+        "Commercial contract renewal dates and rate escalators for the top 5 payors?",
+        "What drives the EBITDA add-backs, and are any related to the founder's comp?",
       ],
-      claims_to_verify: ["94% contract renewal rate", "72% contracted revenue"],
-      summary: "A recurring, diversified services business at a reasonable ask. Key-person risk around the retiring owner is the main diligence item.",
+      claims_to_verify: ["7% same-clinic visit growth", "400+ referring surgeons"],
+      summary: "A growing, well-run PT platform with a commercial-heavy payor mix at a fair ask. Medicare rate risk and founder referral relationships are the key diligence items.",
     },
   },
   {
     id: "brightpath",
-    title: "BrightPath Staffing (screen fail)",
+    title: "BrightPath Staffing",
     text: `BrightPath Clinical Staffing: Investment Opportunity
 
 BrightPath places travel and per-diem nurses with hospital systems in the Midwest.
@@ -119,7 +128,7 @@ EBITDA       14.0    10.0     7.0
 - Bill rates normalizing post-COVID; management expects stabilization in 2026
 - Seeking 7.0x LTM EBITDA`,
     extraction: {
-      company_name: "BrightPath Clinical Staffing", sector: "Healthcare staffing",
+      company_name: "BrightPath Clinical Staffing", sector: "Healthcare staffing", subsector: "Staffing", sites: null, payor_mix: null,
       description: "Travel and per-diem nurse staffing for Midwest hospital systems.",
       business_model: "Bill-rate spread on nurses placed with hospital clients.",
       hq: "Midwest US",
